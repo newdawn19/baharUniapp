@@ -1,2 +1,5 @@
 # AI Framework local control plane
 /agent_bootstrap/
+
+# 本地验证脚本产物
+*.log

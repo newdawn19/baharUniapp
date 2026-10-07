@@ -1,5 +1,8 @@
-袁浩<template>
+<template>
   <view v-if="!isLoading" class="container">
+    <view class="bahar-gradient-header">
+      <text style="font-size:36rpx;font-weight:600;">个人中心</text>
+    </view>
     <!-- 页面头部 -->
     <view class="main-header">
       <!-- 用户信息 -->
@@ -67,7 +70,7 @@
     </view>
 
     <!--会员升级 start-->
-    <view class="member-update" v-if="memberGrade.length > 0">
+    <view class="member-update bahar-card" v-if="memberGrade.length > 0">
         <view class="update-title">
             <text>会员升级</text>
         </view>
@@ -94,7 +97,7 @@
     <!--会员升级 end-->
 
     <!-- 订单操作 -->
-    <view class="order-navbar">
+    <view class="order-navbar bahar-card">
       <view class="order-navbar-item" v-for="(item, index) in orderNavbar" :key="index" @click="onTargetOrder(item)">
         <view class="item-icon">
           <text class="iconfont" :class="[`icon-${item.icon}`]"></text>
@@ -105,7 +108,7 @@
     </view>
 
     <!-- 我的资产 -->
-    <view class="my-asset">
+    <view class="my-asset bahar-card">
       <view class="asset-left flex-box dis-flex flex-x-center">
         <view class="asset-left-item" @click="onTargetMyCoupon('C')">
           <view class="item-value dis-flex flex-x-center">
@@ -135,7 +138,7 @@
     </view>
 
     <!-- 我的服务 -->
-    <view class="my-service">
+    <view class="my-service bahar-card">
       <view class="service-title">我的服务</view>
       <view class="service-content clearfix">
         <block v-for="(item, index) in service" :key="index">

@@ -1,6 +1,6 @@
 <template>
   <!-- 定位店铺 -->
-  <view class="main-loc">
+  <view class="main-loc bahar-card">
       <view v-if="storeInfo.name" class="diy-location">
         <view class="inner" @click="onTargetLocation">
           <view class="location-input">

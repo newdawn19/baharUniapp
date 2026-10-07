@@ -1,6 +1,6 @@
 <template>
   <!-- 搜索框 -->
-  <view class="search-wrapper">
+  <view class="search-wrapper bahar-card">
     <view class="index-search" @click="onClick">
       <view class="index-cont-search t-c">
         <text class="search-icon iconfont icon-sousuo"></text>

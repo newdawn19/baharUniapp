@@ -1,5 +1,8 @@
 <template>
   <view class="container">
+      <view class="bahar-gradient-header">
+        <text style="font-size:36rpx;font-weight:600;">商城首页</text>
+      </view>
       <empty v-if="!storeInfo" :isLoading="isLoading" tips="数据加载中..."></empty>
       <block>
           <Location v-if="storeInfo" :storeInfo="storeInfo"/>

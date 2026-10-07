@@ -1,6 +1,6 @@
 <template>
   <!-- 导航组 -->
-  <view class="diy-navBar" :style="{ background: itemStyle.background, color: itemStyle.textColor }">
+  <view class="diy-navBar bahar-card" :style="{ background: itemStyle.background, color: itemStyle.textColor }">
     <view class="data-list" :class="[`avg-sm-${itemStyle.rowsNum}`]">
       <view class="item-nav" v-for="(dataItem, index) in dataList" :key="index">
         <view class="nav-to" :class="'nav-' + index" @click="onLink(dataItem.url)">

@@ -3,3 +3,7 @@
 
 # 本地验证脚本产物
 *.log
+
+# 本地运行产物（WorkBuddy 工作目录）与 IDE 配置
+.codebuddy/
+.idea/

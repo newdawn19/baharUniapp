@@ -98,7 +98,9 @@
       text-align: left;
       padding-left: 20rpx;
       .text {
-          font-size: 32rpx;
+          font-size: 28rpx;
+          color: #333;
+          font-weight: 600;
       }
       .tip {
           font-size: 22rpx;
@@ -114,6 +116,10 @@
       width: 88rpx;
       height: 88rpx;
       float: left;
+      padding: 4rpx;
+      box-sizing: border-box;
+      border-radius: 24rpx;
+      background: rgba($bahar-theme, 0.08);
     }
 
     .item-image .image {

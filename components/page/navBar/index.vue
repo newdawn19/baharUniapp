@@ -1,9 +1,9 @@
 <template>
   <!-- 导航组 -->
-  <view class="diy-navBar bahar-card" :style="{ background: itemStyle.background, color: itemStyle.textColor }">
+  <view class="diy-navBar bahar-card bahar-anim" :style="{ background: itemStyle.background, color: itemStyle.textColor }">
     <view class="data-list" :class="[`avg-sm-${itemStyle.rowsNum}`]">
       <view class="item-nav" v-for="(dataItem, index) in dataList" :key="index">
-        <view class="nav-to" :class="'nav-' + index" @click="onLink(dataItem.url)">
+        <view class="nav-to bahar-press" :class="'nav-' + index" @click="onLink(dataItem.url)">
           <view class="item-image">
             <image class="image" mode="widthFix" :src="dataItem.iconUrl"></image>
           </view>
@@ -65,11 +65,16 @@
     font-weight: bold;
     .nav-to {
         margin: 0rpx 8px 0px 8px;
-        padding: 38rpx 10rpx 10rpx 10rpx;
+        padding: 38rpx 10rpx 12rpx 10rpx;
         border-radius: 20rpx;
         height: 150rpx;
-        background: linear-gradient(to bottom, #ffffff, #f5f5f5);
-        border: solid 1rpx #ccc;
+        background: #fafbfc;
+        border: none;
+        transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .nav-to:active {
+        transform: scale(0.96);
+        background: #f0f5f5;
     }
     .nav-0 {
         margin: 0rpx 4px 0px 8px;

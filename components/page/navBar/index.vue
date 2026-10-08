@@ -49,9 +49,11 @@
 </script>
 
 <style lang="scss" scoped>
-  /* 卡片容器：取代旧的 float 分列写法 */
+  /* 卡片容器：取代旧的 float 分列写法。
+     外边距刻意与全局 .bahar-card 同为 24rpx —— 差哪怕 2px，
+     同一屏里四宫格卡与商品/优惠券卡的左右边缘就对不齐（用户报的就是"左右不对齐"）。 */
   .diy-navBar {
-    margin: 20rpx;
+    margin: 24rpx;
     padding: 6rpx;
     border-radius: 20rpx;
     border: 1rpx solid #e6e6e6;

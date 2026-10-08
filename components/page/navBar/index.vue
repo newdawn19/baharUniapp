@@ -1,11 +1,11 @@
 <template>
   <!-- 导航组 -->
-  <view class="diy-navBar bahar-card bahar-anim" :style="{ background: itemStyle.background, color: itemStyle.textColor }">
-    <view class="data-list" :class="[`avg-sm-${itemStyle.rowsNum}`]">
+  <view class="diy-navBar bahar-anim" :style="{ background: itemStyle.background, color: itemStyle.textColor }">
+    <view class="data-list" :class="[`avg-sm-${itemStyle.rowsNum || 4}`]">
       <view class="item-nav" v-for="(dataItem, index) in dataList" :key="index">
         <view class="nav-to bahar-press" :class="'nav-' + index" @click="onLink(dataItem.url)">
           <view class="item-image">
-            <image class="image" mode="widthFix" :src="dataItem.iconUrl"></image>
+            <image class="image" mode="aspectFit" :src="dataItem.iconUrl"></image>
           </view>
           <view class="item-text onelist-hidden">
              <view class="text">{{ dataItem.name }}</view>
@@ -37,7 +37,7 @@
 
     /**
      * 组件的方法列表
-     * 更新属性和数据的方法与更新页面数据的方法类似
+     * 更新属性和数据的方法与更新数据类似
      */
     methods: {
         onLink(linkObj) {
@@ -49,96 +49,85 @@
 </script>
 
 <style lang="scss" scoped>
-  .diy-navBar .data-list::after {
-    clear: both;
-    content: " ";
-    display: table;
+  /* 卡片容器：取代旧的 float 分列写法 */
+  .diy-navBar {
+    margin: 20rpx;
+    padding: 6rpx;
+    border-radius: 20rpx;
+    border: 1rpx solid #e6e6e6;
+    box-sizing: border-box;
+  }
+
+  .diy-navBar .data-list {
+    display: flex;
+    flex-wrap: wrap;
   }
 
   .item-nav {
-    float: left;
-    margin: 10rpx 0px 4rpx 0px;
-    text-align: center;
-    background: #ffffff;
+    box-sizing: border-box;
     padding: 2rpx;
-    color: #0c5566;
-    font-weight: bold;
+    text-align: center;
     .nav-to {
-        margin: 0rpx 8px 0px 8px;
-        padding: 38rpx 10rpx 12rpx 10rpx;
-        border-radius: 20rpx;
-        height: 150rpx;
-        background: #fafbfc;
-        border: none;
+        margin: 0;
+        padding: 16rpx 8rpx 12rpx 8rpx;
+        border-radius: 12rpx;
+        min-height: 120rpx;
+        box-sizing: border-box;
+        background: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
+        border: 1rpx solid #e5e5e5;
         transition: transform 0.15s ease, background 0.15s ease;
     }
     .nav-to:active {
         transform: scale(0.96);
         background: #f0f5f5;
     }
-    .nav-0 {
-        margin: 0rpx 4px 0px 8px;
-    }
-    .nav-1 {
-        margin: 0rpx 8px 0px 4px;
-    }
-    .nav-2 {
-        margin: 0rpx 4px 0px 8px;
-    }
-    .nav-3 {
-        margin: 0rpx 8px 0px 4px;
-    }
-    .nav-4 {
-        margin: 0rpx 4px 0px 8px;
-    }
-    .nav-5 {
-        margin: 0rpx 8px 0px 4px;
-    }
     .item-text {
-      text-align: left;
-      padding-left: 20rpx;
+      padding: 0 4rpx;
       .text {
-          font-size: 28rpx;
+          font-size: 24rpx;
           color: #333;
           font-weight: 600;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
       }
       .tip {
-          font-size: 22rpx;
-          margin-top: 8rpx;
-          color: #999;
+          font-size: 20rpx;
+          margin-top: 4rpx;
+          color: #333;
+          opacity: 0.8;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
       }
     }
 
     .item-image {
-      margin-bottom: 4px;
+      margin: 0 auto;
       font-size: 0;
-      margin-left: 30rpx;
-      width: 88rpx;
-      height: 88rpx;
-      float: left;
-      padding: 4rpx;
+      width: 72rpx;
+      height: 72rpx;
       box-sizing: border-box;
-      border-radius: 24rpx;
-      background: rgba($bahar-theme, 0.08);
     }
 
     .item-image .image {
-      width: 80rpx;
-      height: 80rpx;
+      width: 72rpx;
+      height: 72rpx;
+      border-radius: 16rpx;
     }
 
   }
 
-  /* 分列布局 */
+  /* 分列布局（flex 等分，默认 4 列） */
   .diy-navBar .avg-sm-3>.item-nav {
-    width: 33.33333333%;
+    flex: 0 0 33.33333333%;
   }
 
   .diy-navBar .avg-sm-4>.item-nav {
-    width: 25%;
+    flex: 0 0 25%;
   }
 
   .diy-navBar .avg-sm-2>.item-nav {
-    width: 50%;
+    flex: 0 0 50%;
   }
 </style>

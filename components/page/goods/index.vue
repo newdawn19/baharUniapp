@@ -2,7 +2,7 @@
   <!-- 商品列表 -->
   <view class="goods-container bahar-card">
       <view class="recommend" v-if="list.content.length > 0">
-         <text class="txt">为您推荐</text>
+         <text class="txt">热门商品</text>
       </view>
       <mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }" @down="downCallback" :up="upOption" @up="upCallback">
       <view class="diy-goods" :style="{ background: itemStyle.background }">
@@ -410,7 +410,7 @@
 
               .price_x {
                 margin-right: 16rpx;
-                color: #f03c3c;
+                color: #fa5151;
                 font-size: 33rpx;
                 font-weight: bold;
               }

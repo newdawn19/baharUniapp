@@ -673,12 +673,12 @@
 
   // 会员升级
   .member-update {
-      margin: 22rpx auto 0rpx auto;
+      /* 与 hero/资产卡/订单/我的服务同规格：margin 24rpx(=12px)，去掉 width:94% */
+      margin: 22rpx 24rpx 0;
       padding: 20rpx 0;
       border-radius: 10rpx;
       box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
       background: #fff;
-      width: 94%;
       text-align: center;
       .update-title {
         padding-left: 20rpx;

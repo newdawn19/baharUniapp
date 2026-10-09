@@ -1,9 +1,7 @@
 <template>
   <view class="container">
-      <!-- 装饰渐变头保持普通文档流：不参与吸顶，避免吸顶锚点被它的高度变化带跑 -->
-      <view class="bahar-gradient-header">
-        <text style="font-size:36rpx;font-weight:600;">商城首页</text>
-      </view>
+      <!-- 装饰头已移除：它叠在吸顶区之上占掉首屏 175px（约 26%），竞品没有这块。
+           样式类 .bahar-gradient-header 保留在 App.vue，其它页面照用。 -->
       <empty v-if="!storeInfo" :isLoading="isLoading" tips="数据加载中..."></empty>
       <!-- 门店信息 + 搜索框作为一个整体吸顶固定 -->
       <view class="index-sticky-header" v-if="storeInfo">

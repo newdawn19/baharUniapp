@@ -151,8 +151,10 @@
         // 系统设置
         setting: {},
         // 当前商户数据
-        // 初始骨架：数据未回来时模板会读 confirmInfo.storeInfo / merchantInfo.name，
-        // 给 {} 会让首帧抛 TypeError（console error 不为 0）
+        // 初始骨架：模板必然读 confirmInfo.storeInfo / merchantInfo.name，
+        // 给 {} 会在首帧抛 TypeError。
+        // 注：本页未登记在 pages.json，H5 实测到不了（hash 访问 bodyTextLen=0），
+        // 所以这处修复没有 H5 实测证据支撑；保留是因为它在代码层面确为真缺陷。
         dataInfo: { confirmInfo: { storeInfo: null, merchantInfo: { name: '' }, realName: '' } },
         // 账户资产
         assets: { prestore: '--', timer: '--', coupon: '--' },

@@ -500,7 +500,8 @@
   .my-asset {
     display: flex;
     background: linear-gradient(to bottom, #ffffff 0%, #fbfcfc 100%);
-    margin: 10rpx 20rpx 10rpx 20rpx;
+    /* 竞品 margin:10rpx 25rpx；原来 20rpx 让本卡比 hero/相邻卡宽 1.3~2px */
+    margin: 10rpx 25rpx;
     padding: 32rpx 0 28rpx;
     border: 2rpx solid rgba($bahar-theme, 0.06);
     border-radius: 16rpx;
@@ -517,14 +518,16 @@
       width: 33.33%;
 
       /* 格子之间的 2rpx 分隔线（最后一格右侧不画） */
+      /* 竞品规格：60rpx 高中性灰，垂直居中（原来用主题色 8% + 64% 高，偏高偏色） */
       &:not(:last-child)::after {
         content: '';
         position: absolute;
-        top: 18%;
+        top: 50%;
         right: 0;
         width: 2rpx;
-        height: 64%;
-        background: rgba($bahar-theme, 0.08);
+        height: 60rpx;
+        margin-top: -30rpx;
+        background: #f0f0f0;
       }
 
       .item-icon {
@@ -535,7 +538,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 32rpx;
+        /* 竞品规格：图标 50rpx（容器 64rpx）；原来 32rpx 字形明显小于圆底 */
+        font-size: 50rpx;
         color: #fff;
         background: linear-gradient(135deg, $bahar-theme, rgba($bahar-theme, 0.72));
       }
@@ -550,7 +554,7 @@
       .item-name {
         font-size: 22rpx;
         margin-top: 6rpx;
-        color: #888;
+        color: #999;
       }
     }
 

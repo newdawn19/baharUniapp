@@ -151,7 +151,9 @@
         // 系统设置
         setting: {},
         // 当前商户数据
-        dataInfo: {},
+        // 初始骨架：数据未回来时模板会读 confirmInfo.storeInfo / merchantInfo.name，
+        // 给 {} 会让首帧抛 TypeError（console error 不为 0）
+        dataInfo: { confirmInfo: { storeInfo: null, merchantInfo: { name: '' }, realName: '' } },
         // 账户资产
         assets: { prestore: '--', timer: '--', coupon: '--' },
         // 我的服务

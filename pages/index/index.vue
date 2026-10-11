@@ -11,15 +11,24 @@
       <block>
           <Banner v-if="storeInfo" flush :itemStyle="options.bannerStyle" :params="options.bannerParam" :dataList="banner"/>
       </block>
+      <!-- 四宫格功能入口 -->
       <block v-if="storeInfo && navigation.length">
           <NavBar :itemStyle="options.navStyle" :params="{}" :dataList="navigation"/>
       </block>
+      <!-- 通栏广告图 -->
+      <block v-if="storeInfo && ads.length">
+          <view class="bahar-card index-ad-card">
+              <Images :itemStyle="options.adStyle" :dataList="ads"/>
+          </view>
+      </block>
+      <!-- 优惠券领取区 -->
       <block v-if="storeInfo && coupons.length">
           <view class="bahar-card index-coupon-card">
             <view class="index-section-title"><text class="txt">优惠专区</text></view>
             <Coupon :itemStyle="options.couponStyle" :dataList="coupons"/>
           </view>
       </block>
+      <!-- 热门商品（双列） -->
       <block>
           <Goods v-if="storeInfo" :itemStyle="options.goodsStyle" :isReflash="isReflash" ref="mescrollItem" :params="options.goodsParams"/>
       </block>
@@ -32,6 +41,7 @@
   import Search from '@/components/search'
   import Banner from '@/components/page/banner'
   import NavBar from '@/components/page/navBar'
+  import Images from '@/components/page/image'
   import Coupon from '@/components/page/coupon'
   import Goods from '@/components/page/goods'
   import Empty from '@/components/empty'
@@ -43,6 +53,21 @@
 
   const App = getApp()
 
+  /**
+   * 判断一条轮播数据是不是「通栏广告图」。
+   * 后端没有给三个行业单独开放 ads 字段，约定：图片落在 uploadFiles/ads/ 目录下的
+   * 就是通栏广告图（种子数据 deploy/db/19-home-diy-seed.sql 里的 ID=201）。
+   * 餐饮后端本来就按 position=m_home_ads 单独返回 ads，两种写法都兼容。
+   * @param {Object} item 轮播/广告数据
+   */
+  const isAdItem = (item) => {
+    if (!item) {
+      return false
+    }
+    const image = item.image ? String(item.image) : ''
+    return image.indexOf('/uploadFiles/ads/') >= 0 || item.position === 'm_home_ads'
+  }
+
   export default {
     mixins: [MescrollCompMixin],
     components: {
@@ -50,6 +75,7 @@
        Search,
        Banner,
        NavBar,
+       Images,
        Coupon,
        Goods,
        Empty
@@ -60,9 +86,9 @@
             "goodsStyle": {
                 "background": "#F6F6F6",
                 "display": "list",
-                // 单列左图右文（对齐竞品默认布局）
-                "column": 1,
-                "show": ["goodsName", "goodsPrice", "linePrice", "sellingPoint", "goodsSales"]
+                // 双列网格（对齐竞品当前首页的商品区形态）
+                "column": 2,
+                "show": ["goodsName", "goodsPrice", "linePrice", "goodsSales"]
             },
             "goodsParams": {
                 "source": "auto",
@@ -85,13 +111,17 @@
                 "background": "#ffffff",
                 "rowsNum": "4",
             },
-            "couponStyle": {
+            "adStyle": {
                 "background": "transparent",
-                "display": "list",
-                "column": 1
+                "paddingTop": 0,
+                "paddingLeft": 0
+            },
+            "couponStyle": {
+                "background": "transparent"
             }
         },
         banner: [],
+        ads: [],
         navigation: [],
         coupons: [],
         storeInfo: null,
@@ -144,8 +174,14 @@
           const app = this;
           Api.home()
             .then(result => {
-                 app.banner = result.data.banner;
-                 app.navigation = result.data.navigation;
+                 const data = result.data ? result.data : {};
+                 const bannerList = data.banner ? data.banner : [];
+                 // 轮播里剔除通栏广告图，避免同一张图出现两遍
+                 app.banner = bannerList.filter(item => !isAdItem(item));
+                 // 通栏广告图：餐饮端后端直出 ads；其余三端按图片目录约定从 banner 里拆
+                 const adSource = (data.ads && data.ads.length) ? data.ads : bannerList.filter(isAdItem);
+                 app.ads = adSource.map(item => ({ imgUrl: item.image, link: item.url, title: item.title }));
+                 app.navigation = data.navigation ? data.navigation : [];
                  uni.removeStorageSync("reflashHomeData");
                  app.isReflash = false;
             })
@@ -161,7 +197,12 @@
           couponApi.list(param, { isPrompt: false, load: false })
             .then(result => {
                  const page = (result.data && result.data.coupon) ? result.data.coupon : {}
-                 app.coupons = page.content || []
+                 const list = page.content ? page.content : []
+                 // 面额为 0 的券在上面显示不出「¥金额」，首页只挑有面额的，按面额从大到小
+                 app.coupons = list
+                     .filter(item => Number(item.amount) > 0)
+                     .sort((a, b) => Number(b.amount) - Number(a.amount))
+                     .slice(0, 6)
             })
             .catch(() => {
                  app.coupons = []
@@ -255,5 +296,11 @@
   /* 优惠券区做成与四宫格/商品区一致的卡片 */
   .index-coupon-card {
     padding: 0 0 12rpx 0;
+  }
+
+  /* 通栏广告图：卡片不留内边距，图片自己撑满 */
+  .index-ad-card {
+    padding: 0;
+    overflow: hidden;
   }
 </style>

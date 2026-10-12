@@ -4,6 +4,7 @@
       <view v-if="storeInfo.name" class="diy-location">
         <view class="inner" @click="onTargetLocation">
           <view class="location-input">
+            <image v-if="storeInfo.logo" class="store-logo" :src="storeInfo.logo" mode="aspectFill"></image>
             <text class="store">
                <text class="name">{{ storeInfo.name }}</text>
                <text class="switch" v-if="storeInfo.single == 'N'">[切换店铺]</text>
@@ -81,18 +82,36 @@
   .location-input {
     color: #484848;
     padding-left: 10rpx;
+    display: flex;
+    align-items: center;
+  }
+
+  /* 门店LOGO：圆形展示位（后台商户/门店可配置 mt_store.logo） */
+  .store-logo {
+    width: 52rpx;
+    height: 52rpx;
+    border-radius: 50%;
+    margin-right: 12rpx;
+    flex-shrink: 0;
+    background: #ffffff;
+    border: 2rpx solid rgba(255, 255, 255, 0.85);
   }
 
   .store {
+      /* 占满 LOGO 右侧剩余宽度，避免名称被挤到换行 */
+      flex: 1;
+      min-width: 0;
       .name {
           font-size: 32rpx;
           font-weight: 700;
           color: #ffffff;
+          white-space: nowrap;
       }
       .switch {
-          margin-left: 15rpx;
+          margin-left: 12rpx;
           font-size: 22rpx;
           color: #ffffff;
+          white-space: nowrap;
       }
       .address {
           clear: bold;
@@ -101,6 +120,9 @@
           font-size: 23rpx;
           margin-left: 0rpx;
           color: #ffffff;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           .location-icon {
             margin-right: 4rpx;
             font-size: 24rpx;

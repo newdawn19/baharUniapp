@@ -119,11 +119,11 @@
           <view class="chart-title">近七日订单数量</view>
           <view class="bar-chart">
             <view class="chart-y-axis">
-              <text v-for="n in 5" :key="n" class="y-label">{{ 10 - (n-1)*2 }}</text>
+              <text v-for="(t, i) in orderYTicks" :key="i" class="y-label">{{ t }}</text>
             </view>
             <view class="chart-content">
               <view class="grid-lines">
-                <view v-for="n in 5" :key="n" class="grid-line"></view>
+                <view v-for="(t, i) in orderYTicks" :key="i" class="grid-line"></view>
               </view>
               <view class="bars-wrapper">
                 <view
@@ -135,7 +135,7 @@
                     <text class="bar-value">{{ item.value }}</text>
                     <view
                       class="bar"
-                      :style="{ height: (item.value / 10 * 100) + '%' }"
+                      :style="{ height: barHeight(item.value, orderYMax) }"
                     ></view>
                   </view>
                   <text class="bar-label">{{ item.label }}</text>
@@ -154,11 +154,11 @@
           <view class="chart-title">近七日会员活跃数</view>
           <view class="line-chart">
             <view class="chart-y-axis">
-              <text v-for="n in 7" :key="n" class="y-label">{{ 12 - (n-1)*2 }}</text>
+              <text v-for="(t, i) in memberYTicks" :key="i" class="y-label">{{ t }}</text>
             </view>
             <view class="chart-content">
               <view class="grid-lines">
-                <view v-for="n in 7" :key="n" class="grid-line"></view>
+                <view v-for="(t, i) in memberYTicks" :key="i" class="grid-line"></view>
               </view>
               <view class="line-wrapper">
                 <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="line-svg">
@@ -182,7 +182,7 @@
                     v-for="(item, index) in memberChartData"
                     :key="index"
                     class="point-wrapper"
-                    :style="{ left: (index / (memberChartData.length - 1) * 100) + '%', bottom: (item.value / 12 * 100) + '%' }"
+                    :style="{ left: pointLeft(index) + '%', bottom: (item.value / memberYMax * 100) + '%' }"
                   >
                     <text class="point-value">{{ item.value }}</text>
                   </view>
@@ -286,7 +286,7 @@ export default {
         { name: '近15天', value: '15days' },
         { name: '近30天', value: '30days' }
       ],
-      currentTab: 'today',
+      currentTab: '30days',
       // 店铺列表
       storeList: [
         { id: 0, name: '全部店铺' }
@@ -315,30 +315,33 @@ export default {
   },
 
   computed: {
-    // 计算折线图的点坐标
+    // 订单柱状图 y 轴刻度（自上而下：最大值 → 0）
+    orderYTicks() {
+      return this.buildTicks(this.orderChartData)
+    },
+    // 会员折线图 y 轴刻度
+    memberYTicks() {
+      return this.buildTicks(this.memberChartData)
+    },
+    // y 轴最大值（用于柱高 / 点高归一化）
+    orderYMax() {
+      return this.orderYTicks[0] || 1
+    },
+    memberYMax() {
+      return this.memberYTicks[0] || 1
+    },
+    // 计算折线图的点坐标（按 memberYMax 归一化，与 y 轴刻度保持一致）
     memberChartPoints() {
-      const points = []
-      const len = this.memberChartData.length
-      if (len === 0) return ''
-      const maxValue = Math.max(...this.memberChartData.map(item => item.value), 1)
-      this.memberChartData.forEach((item, index) => {
-        const x = (index / (len - 1)) * 100
-        const y = 100 - (item.value / maxValue * 100)
-        points.push(`${x},${y}`)
-      })
-      return points.join(' ')
+      return this.memberChartPointsArray.map(p => `${p.x},${p.y}`).join(' ')
     },
     memberChartPointsArray() {
-      const points = []
       const len = this.memberChartData.length
       if (len === 0) return []
-      const maxValue = Math.max(...this.memberChartData.map(item => item.value), 1)
-      this.memberChartData.forEach((item, index) => {
-        const x = (index / (len - 1)) * 100
-        const y = 100 - (item.value / maxValue * 100)
-        points.push({ x, y })
-      })
-      return points
+      const max = this.memberYMax || 1
+      return this.memberChartData.map((item, index) => ({
+        x: this.pointLeft(index),
+        y: 100 - (Number(item.value) / max * 100)
+      }))
     }
   },
 
@@ -348,6 +351,46 @@ export default {
   },
 
   methods: {
+    // 折线点 x 百分比（等分；单点居中）
+    pointLeft(index) {
+      const len = this.memberChartData.length
+      if (len <= 0) return 0
+      if (len === 1) return 50
+      return (index / (len - 1)) * 100
+    },
+
+    // 生成 y 轴刻度（自上而下共 5 档：yMax → 0）
+    buildTicks(data) {
+      const vals = (data || []).map(i => Number(i.value) || 0)
+      const max = vals.length ? Math.max(...vals) : 0
+      const yMax = this.niceCeil(max)
+      const ticks = []
+      for (let i = 4; i >= 0; i--) ticks.push(this.round1(yMax * i / 4))
+      return ticks
+    },
+
+    // 最大值向上取到"好看且能被 4 整除"的刻度（如 5→8、7→8、12→12）
+    niceCeil(v) {
+      if (!v || v <= 0) return 4
+      const ladder = [4, 8, 12, 16, 20, 24, 28, 32, 40, 48, 60, 80, 100, 120, 160, 200, 300, 400, 500, 800, 1000]
+      for (const n of ladder) {
+        if (v <= n) return n
+      }
+      const mag = Math.pow(10, Math.floor(Math.log10(v)))
+      return Math.ceil(v / mag) * mag
+    },
+
+    // 柱高百分比（按 yMax 归一化，封顶 100%）
+    barHeight(value, max) {
+      const v = Number(value) || 0
+      const m = Number(max) || 1
+      return Math.min(100, v / m * 100) + '%'
+    },
+
+    round1(v) {
+      return Math.round(v * 10) / 10
+    },
+
     // 初始化日期
     initDate() {
       const now = new Date()
@@ -785,7 +828,7 @@ export default {
   .chart-y-axis {
     width: 50rpx;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     justify-content: space-between;
     padding-right: 8rpx;
 
@@ -873,7 +916,7 @@ export default {
   .chart-y-axis {
     width: 50rpx;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     justify-content: space-between;
     padding-right: 8rpx;
 

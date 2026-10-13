@@ -13,7 +13,7 @@
       <!-- 手机号 -->
       <view class="form-item">
         <text class="iconfont icon-sy-yh"></text>
-        <input class="form-item--input uni-input" type="text" v-model="account" maxlength="30" clearable="true" placeholder="请输入您的用户名" />
+        <input class="form-item--input uni-input" type="text" v-model="account" maxlength="30" clearable="true" placeholder="请输入手机号或会员号" />
       </view>
       <!-- 密码 -->
       <view class="form-item">
@@ -243,14 +243,11 @@
         return true
       },
       
-      // 验证账号
+      // 验证账号：登录账号为手机号(mobile)或会员号(user_no)，二者均唯一；
+      // 姓名(name)仅作昵称、可重复，不作为登录账号，故不再限制长度
       validteAccount(str) {
         if (Verify.isEmpty(str)) {
-            this.$toast('请先输入您的用户名')
-            return false
-        }
-        if (str.length < 5) {
-            this.$toast('用户名不能少于5位')
+            this.$toast('请输入手机号或会员号')
             return false
         }
         return true

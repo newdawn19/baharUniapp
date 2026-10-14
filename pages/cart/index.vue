@@ -35,8 +35,7 @@
           </view>
           <view class="item-foot">
             <view class="goods-price">
-              <text class="unit">￥</text>
-              <text class="value">{{ item.goodsInfo.price }}</text>
+              <text class="value">{{ formatMoney(item.goodsInfo.price) }}</text>
             </view>
             <view class="stepper">
               <u-number-box :min="1" :value="item.num" @change="onChangeStepper($event, item)" />
@@ -60,8 +59,7 @@
       <view class="total-info">
         <text>合计：</text>
         <view class="goods-price">
-          <text class="unit">￥</text>
-          <text class="value">{{ totalPrice }}</text>
+          <text class="value">{{ formatMoney(totalPrice) }}</text>
         </view>
       </view>
       <view class="cart-action">
@@ -83,10 +81,11 @@
 </template>
 
 <script>
-  import { inArray, arrayIntersect, debounce } from '@/utils/util'
-  import { checkLogin, setCartTotalNum, setCartTabBadge } from '@/utils/app'
-  import * as CartApi from '@/api/cart'
-  import Empty from '@/components/empty'
+   import { inArray, arrayIntersect, debounce } from '@/utils/util'
+   import { checkLogin, setCartTotalNum, setCartTabBadge } from '@/utils/app'
+   import * as CartApi from '@/api/cart'
+   import { formatMoney } from '@/utils/money'
+   import Empty from '@/components/empty'
   const CartIdsIndex = 'CartIds'
   export default {
     components: {

@@ -2,6 +2,7 @@ import store from '../store'
 import * as util from './util'
 import { paginate } from '@/common/constant'
 import * as MessageApi from '@/api/message'
+import { I18n } from '@/common/i18n'
 
 /**
  * 获取当前运行的终端(App H5 小程序)
@@ -43,7 +44,7 @@ export const getPlatform = () => {
  */
 export const showSuccess = (msg, callback) => {
   uni.showToast({
-    title: msg,
+    title: I18n.t(msg),
     icon: 'success',
     mask: true,
     duration: 1500,
@@ -58,8 +59,8 @@ export const showSuccess = (msg, callback) => {
  */
 export const showError = (msg, callback) => {
   uni.showModal({
-    title: '友情提示',
-    content: msg,
+    title: I18n.t('友情提示'),
+    content: I18n.t(msg),
     showCancel: false,
     success(res) {
       callback && callback()
@@ -72,7 +73,7 @@ export const showError = (msg, callback) => {
  */
 export const showToast = msg => {
   uni.showToast({
-    title: msg,
+    title: I18n.t(msg),
     icon: 'none'
   })
 }
@@ -172,10 +173,10 @@ export const needLogin = () => {
   const isLogin = checkLogin();
   if (!isLogin) {
       uni.showModal({
-        title: '温馨提示',
-        content: '此时此刻需要您登录喔~',
-        confirmText: "去登录",
-        cancelText: "再逛会",
+        title: I18n.t('温馨提示'),
+        content: I18n.t('此时此刻需要您登录喔~'),
+        confirmText: I18n.t('去登录'),
+        cancelText: I18n.t('再逛会'),
         success: res => {
           if (res.confirm) {
               uni.navigateTo({
@@ -270,7 +271,7 @@ export const showMessage = () =>  {
       .then(result => {
         if (result.data.content) {
             uni.showModal({
-                title: result.data.title ? result.data.title : '友情提示',
+                title: result.data.title ? result.data.title : I18n.t('友情提示'),
                 content: result.data.content,
                 showCancel: false,
                 success(res) {

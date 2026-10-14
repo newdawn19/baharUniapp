@@ -8,7 +8,7 @@
       <view class="specification-wrapper">
         <scroll-view class="specification-wrapper-content" scroll-y="true">
           <view class="specification-header">
-            <view class="specification-name"><text class="price" v-if="memberGrade.catchValue > 0">￥{{ memberGrade.catchValue }}</text>购买{{ memberGrade.name }}</view>
+            <view class="specification-name"><text class="price" v-if="memberGrade.catchValue > 0">{{ formatMoney(memberGrade.catchValue) }}</text>购买{{ memberGrade.name }}</view>
           </view>
           <view class="specification-content">
             <view class="grade-item" v-if="memberGrade.discount > 0">
@@ -58,14 +58,14 @@
                            <text v-if="useCoupon" class="iconfont is-use icon-success"></text>
                            <text v-if="!useCoupon" class="iconfont icon-success"></text>
                            <text class="point-amount">使用卡券抵扣</text>
-                           <text class="amount">￥{{ couponInfo.amount }}</text>
+                           <text class="amount">{{ formatMoney(couponInfo.amount) }}</text>
                         </view>
                     </view>
                 </view>
                 <view class="pay-item">
                     <view class="item-amount">
                         <view class="title">
-                            实付金额：<text class="amount">￥{{ ((parseFloat(memberGrade.catchValue) - parseFloat(useCouponInfo.amount)) >= 0 ? (parseFloat(memberGrade.catchValue) - parseFloat(useCouponInfo.amount)) : 0.0.toFixed(2)) }}</text>
+                            实付金额：<text class="amount">{{ formatMoney((parseFloat(memberGrade.catchValue) - parseFloat(useCouponInfo.amount)) >= 0 ? (parseFloat(memberGrade.catchValue) - parseFloat(useCouponInfo.amount)) : 0) }}</text>
                         </view>
                     </view>
                 </view>
@@ -87,9 +87,10 @@
 </template>
 
 <script>
-  import * as SettlementApi from '@/api/settlement'
-  import PayTypeEnum from '@/common/enum/order/PayType'
-  import { wxPayment } from '@/utils/app'
+   import * as SettlementApi from '@/api/settlement'
+   import PayTypeEnum from '@/common/enum/order/PayType'
+   import { wxPayment } from '@/utils/app'
+   import { formatMoney } from '@/utils/money'
   
   var that; // 当前页面对象
   var vk; // 自定义函数集

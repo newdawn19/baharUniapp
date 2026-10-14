@@ -77,14 +77,14 @@
              <!-- 商品数量和单价 -->
             <view class="flow-list-cont dis-flex flex-x-between flex-y-center">
               <text class="small"> x {{ item.num }} </text>
-              <text class="flow-cont">￥{{ item.goodsInfo.price }} </text>
+              <text class="flow-cont">{{ formatMoney(item.goodsInfo.price) }} </text>
             </view>
           </view>
         </view>
       </view>
       <view class="flow-num-box b-f">
         <text>共{{ totalNum }}件，合计：</text>
-        <text class="flow-money col-m">￥{{ totalPrice }}</text>
+        <text class="flow-money col-m">{{ formatMoney(totalPrice) }}</text>
       </view>
     </view>
     
@@ -97,7 +97,7 @@
         <view class="flex-five t-r">
           <view v-if="couponList.length > 0" @click="handleShowPopup()">
             <text class="col-m" v-if="selectCouponIds.length > 0">已选{{ selectCouponIds.length }}张储值卡</text>
-            <text class="col-m" v-else-if="couponAmount">-￥{{ couponAmount }}</text>
+            <text class="col-m" v-else-if="couponAmount">-{{ formatMoney(couponAmount) }}</text>
             <text class="col-m" v-else>可用卡券{{ couponList.length }}张</text>
             <text class="right-arrow iconfont icon-arrow-right"></text>
           </view>
@@ -111,7 +111,7 @@
           <text class="iconfont icon-help"></text>
         </view>
         <view class="flex-five dis-flex flex-x-end flex-y-center">
-          <text class="points-money col-m">-￥{{ usePointAmount }}</text>
+          <text class="points-money col-m">-{{ formatMoney(usePointAmount) }}</text>
           <u-switch v-model="isUsePoints" size="48" active-color="#00acac" @change="getCartList()"></u-switch>
         </view>
       </view>
@@ -130,7 +130,7 @@
           <text class="title">配送费用：</text>
         </view>
         <view class="flex-five dis-flex flex-x-end flex-y-center">
-          <text class="points-money col-m">￥{{ deliveryFee }}</text>
+          <text class="points-money col-m">{{ formatMoney(deliveryFee) }}</text>
         </view>
       </view>
     </view>
@@ -168,7 +168,7 @@
       <view class="dis-flex chackout-box">
         <view class="chackout-left pl-12">
           <view class="col-amount-do">支付金额：
-              <text class="pay-amount">￥{{ payPrice ? payPrice.toFixed(2) : '0.00' }}</text>
+              <text class="pay-amount">{{ formatMoney(payPrice ? payPrice : 0) }}</text>
           </view>
         </view>
         <view class="chackout-right" @click="onSubmitOrder()">
@@ -209,7 +209,7 @@
                     </view>
                     <view class="coupon-type">{{ item.type }}</view>
                     <view class="tip dis-flex flex-dir-column flex-x-center">
-                      <text class="money" v-if="item.content != '2'">￥{{ item.amount }}</text>
+                      <text class="money" v-if="item.content != '2'">{{ formatMoney(item.amount) }}</text>
                       <text class="money" v-if="item.content == '2'">{{ (item.amount / 10).toFixed(2) }}折</text>
                       <text class="pay-line">{{ item.description }}</text>
                     </view>
@@ -288,8 +288,9 @@
   import * as SettlementApi from '@/api/settlement'
   import DeliveryTypeEnum from '@/common/enum/order/DeliveryType'
   import PayTypeEnum from '@/common/enum/order/PayType'
-  import { wxPayment } from '@/utils/app'
-  import selectSwitch from "@/components/xuan-switch/xuan-switch.vue";
+   import { wxPayment } from '@/utils/app'
+   import { formatMoney } from '@/utils/money'
+   import selectSwitch from "@/components/xuan-switch/xuan-switch.vue";
   import * as AddressApi from '@/api/address'
   import * as settingApi from '@/api/setting'
 

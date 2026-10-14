@@ -12,10 +12,9 @@
       <view class="info-item info-item__top dis-flex flex-x-between flex-y-end">
         <view class="block-left dis-flex flex-y-end">
           <!-- 商品售价 -->
-          <text class="floor-price__samll">￥</text>
-          <text class="floor-price">{{ goods.price }}</text>
+          <text class="floor-price">{{ formatMoney(goods.price) }}</text>
           <!-- 划线价 -->
-          <text class="original-price">￥{{ goods.linePrice }}</text>
+          <text class="original-price">{{ formatMoney(goods.linePrice) }}</text>
         </view>
         <view class="block-right dis-flex">
           <!-- 销量 -->
@@ -120,9 +119,10 @@
 </template>
 
 <script>
-  import { setCartTabBadge, setCartTotalNum } from '@/utils/app'
-  import * as GoodsApi from '@/api/goods'
-  import * as CartApi from '@/api/cart'
+   import { setCartTabBadge, setCartTotalNum } from '@/utils/app'
+   import * as GoodsApi from '@/api/goods'
+   import { formatMoney } from '@/utils/money'
+   import * as CartApi from '@/api/cart'
   import jyfParser from '@/components/jyf-parser/jyf-parser'
   import Shortcut from '@/components/shortcut'
   import SlideImage from './components/SlideImage'

@@ -45,7 +45,7 @@
               <text class="grade">{{ item.gradeName ? item.gradeName : '' }}</text>
             </view>
             <view class="amount">
-              <view class="balance">余额：￥{{ item.balance.toFixed(2) }}</view>
+              <view class="balance">余额：{{ formatMoney(item.balance) }}</view>
               <view class="point">积分：{{ item.point }}</view>
             </view>
             <view class="footer">
@@ -59,10 +59,11 @@
 </template>
 
 <script>
-  import MescrollBody from '@/components/mescroll-uni/mescroll-body.vue'
-  import MescrollMixin from '@/components/mescroll-uni/mescroll-mixins'
-  import * as MemberApi from '@/api/merchant/member'
-  import { getEmptyPaginateObj, getMoreListData } from '@/utils/app'
+   import MescrollBody from '@/components/mescroll-uni/mescroll-body.vue'
+   import MescrollMixin from '@/components/mescroll-uni/mescroll-mixins'
+   import * as MemberApi from '@/api/merchant/member'
+   import { formatMoney } from '@/utils/money'
+   import { getEmptyPaginateObj, getMoreListData } from '@/utils/app'
 
   const pageSize = 15
 

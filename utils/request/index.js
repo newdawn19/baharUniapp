@@ -5,6 +5,7 @@ import store from '@/store'
 import request from './request'
 import config from '@/config'
 import { isWechat } from '../app';
+import { I18n } from '@/common/i18n';
 
 // 后端api地址
 const baseURL = config.apiUrl;
@@ -43,7 +44,7 @@ $http.requestStart = options => {
     if (requestNum <= 0) {
       // 打开加载动画
       uni.showLoading({
-        title: '加载中',
+        title: I18n.t('加载中'),
         mask: true
       })
     }
@@ -77,6 +78,8 @@ $http.requestStart = options => {
   options.header['latitude'] = uni.getStorageSync("latitude") ? uni.getStorageSync("latitude") : '';
   options.header['longitude'] = uni.getStorageSync("longitude") ? uni.getStorageSync("longitude") : '';
   options.header['isWechat'] = isWechat() ? 'Y' : 'N';
+  // 注入语言头，让后端按当前语言返回 message
+  options.header['Accept-Language'] = I18n.current();
   // return false 表示请求拦截，不会继续请求
   return options
 }
@@ -142,10 +145,10 @@ $http.dataFactory = async res => {
     if (loginPopupNum <= 0) {
       loginPopupNum++
       uni.showModal({
-        title: '温馨提示',
-        content: '此时此刻需要您登录喔~',
-        confirmText: "去登录",
-        cancelText: "再逛会",
+        title: I18n.t('温馨提示'),
+        content: I18n.t('此时此刻需要您登录喔~'),
+        confirmText: I18n.t('去登录'),
+        cancelText: I18n.t('再逛会'),
         success: res => {
           loginPopupNum--
           if (res.confirm) {

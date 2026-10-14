@@ -52,7 +52,7 @@
                         <text class="stock text">库存:{{ item.stock ? item.stock : 0 }} 已售:{{ item.initSale ? item.initSale : 0 }}</text>
                       </view>
                       <view class="action">
-                          <text class="price">￥{{ item.price ? item.price : 0 }}</text>
+                          <text class="price">{{ formatMoney(item.price ? item.price : 0) }}</text>
                           <view class="cart">
                               <view v-if="item.isSingleSpec === 'Y'" class="singleSpec">
                                   <view class="ii do-minus" v-if="item.buyNum" @click="onSaveCart(item.id, '-')"></view>
@@ -82,7 +82,7 @@
     <view class="flow-fixed-footer b-f m-top10">
       <view class="dis-flex chackout-box">
         <view class="chackout-left pl-12">
-          <view class="col-amount-do">总金额：<text class="amount">￥{{ totalPrice.toFixed(2) }}</text></view>
+          <view class="col-amount-do">总金额：<text class="amount">{{ formatMoney(totalPrice) }}</text></view>
           <view class="col-amount-view">共计：{{ totalNum }} 件</view>
         </view>
         <view class="chackout-right" @click="doSubmit()">
@@ -96,14 +96,15 @@
 </template>
 
 <script>
-  import { setCartTabBadge, setCartTotalNum } from '@/utils/app'
-  import * as CartApi from '@/api/cart'
-  import * as GoodsApi from '@/api/goods'
-  import * as settingApi from '@/api/setting'
-  import Search from '@/components/search'
-  import Empty from '@/components/empty'
-  import SkuPopup from './components/SkuPopup'
-  import Location from '@/components/page/location'
+   import { setCartTabBadge, setCartTotalNum } from '@/utils/app'
+   import * as CartApi from '@/api/cart'
+   import * as GoodsApi from '@/api/goods'
+   import * as settingApi from '@/api/setting'
+   import { formatMoney } from '@/utils/money'
+   import Search from '@/components/search'
+   import Empty from '@/components/empty'
+   import SkuPopup from './components/SkuPopup'
+   import Location from '@/components/page/location'
 
   const App = getApp()
 

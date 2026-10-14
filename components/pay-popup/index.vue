@@ -16,7 +16,7 @@
                    <view class="item-point">
                       <view class="title">
                          <text class="iconfont icon-success"></text>
-                         <text v-if="payInfo.payDiscount < 1" class="point-amount">会员{{parseFloat(payInfo.payDiscount * 10).toFixed(2)}}折优惠<text class="amount">￥{{(parseFloat(payInfo.totalAmount) - ((parseFloat(payInfo.totalAmount) * parseFloat(payInfo.payDiscount)))).toFixed(2)}}</text></text>
+                         <text v-if="payInfo.payDiscount < 1" class="point-amount">会员{{parseFloat(payInfo.payDiscount * 10).toFixed(2)}}折优惠<text class="amount">{{ formatMoney(parseFloat(payInfo.totalAmount) - ((parseFloat(payInfo.totalAmount) * parseFloat(payInfo.payDiscount)))) }}</text></text>
                       </view>
                    </view>
                 </view>
@@ -25,7 +25,7 @@
                         <view class="title">
                            <text class="iconfont icon-success"></text>
                            <text v-if="payInfo.usePoint > 0" class="point-amount">使用{{ payInfo.usePoint.toFixed(0) }}积分抵扣</text>
-                           <text v-if="payInfo.usePoint > 0" class="amount">￥{{ parseFloat(payInfo.pointAmount).toFixed(2) }}</text>
+                           <text v-if="payInfo.usePoint > 0" class="amount">{{ formatMoney(parseFloat(payInfo.pointAmount)) }}</text>
                            <text v-if="payInfo.usePoint < 1" class="point-amount">不使用积分抵扣</text>
                            <text v-if="payInfo.maxPoint > 0" class="modify" @click="modifyPoint">修改>></text>
                         </view>
@@ -45,7 +45,7 @@
                         <view class="title">
                            <text class="iconfont icon-success"></text>
                            <text v-if="payInfo.couponAmount > 0" class="point-amount">使用卡券抵扣</text>
-                           <text v-if="payInfo.couponAmount > 0" class="amount">￥{{ parseFloat(payInfo.couponAmount).toFixed(2) }}</text>
+                           <text v-if="payInfo.couponAmount > 0" class="amount">{{ formatMoney(parseFloat(payInfo.couponAmount)) }}</text>
                            <text v-if="payInfo.couponAmount <= 0 && payInfo.couponInfo.amount" class="point-amount">不使用卡券抵扣？</text>
                            <text v-if="payInfo.couponInfo.amount" class="modify" @click="modifyCoupon">修改>></text>
                         </view>
@@ -55,7 +55,7 @@
                     <view class="item-amount">
                         <view class="title">
                             <text class="iconfont icon-success"></text>
-                            实付金额：<text class="amount">￥{{ (parseFloat(payInfo.payAmount)).toFixed(2) }}</text>
+                            实付金额：<text class="amount">{{ formatMoney(parseFloat(payInfo.payAmount)) }}</text>
                         </view>
                     </view>
                 </view>
@@ -78,7 +78,7 @@
         <view class="coupon-popup">
            <uni-popup ref="couponPopup" type="dialog">
               <uni-popup-dialog focus="false" v-if="payInfo.couponAmount > 0" v-model="payInfo.usePoint.toFixed(0)" title="确认信息" content="不使用卡券进行抵扣？" type="info" :before-close="true" @close="closeDialog" @confirm="doUseCoupon"></uni-popup-dialog>
-              <uni-popup-dialog focus="false" v-if="payInfo.couponAmount <= 0 && payInfo.couponInfo !== null" title="确认信息" :content="'使用卡券最多可抵扣￥'+ payInfo.couponInfo.amount" type="info" :before-close="true" @close="closeDialog" @confirm="doUseCoupon"></uni-popup-dialog>
+              <uni-popup-dialog focus="false" v-if="payInfo.couponAmount <= 0 && payInfo.couponInfo !== null" title="确认信息" :content="'使用卡券最多可抵扣'+ formatMoney(payInfo.couponInfo.amount)" type="info" :before-close="true" @close="closeDialog" @confirm="doUseCoupon"></uni-popup-dialog>
            </uni-popup>
         </view>
     </view>
@@ -118,9 +118,10 @@
 </template>
 
 <script>
-  import * as SettlementApi from '@/api/settlement'
-  import PayTypeEnum from '@/common/enum/order/PayType'
-  import { wxPayment } from '@/utils/app'
+   import * as SettlementApi from '@/api/settlement'
+   import PayTypeEnum from '@/common/enum/order/PayType'
+   import { wxPayment } from '@/utils/app'
+   import { formatMoney } from '@/utils/money'
   
   var that; // 当前页面对象
   var vk; // 自定义函数集

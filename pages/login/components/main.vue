@@ -1,10 +1,12 @@
 <template>
   <view class="container">      
+    <!-- 语言切换（中 / EN） -->
+    <LangSwitch class="login-lang" @change="onLangChange" />
     <!-- 页面头部 -->
     <view class="header">
       <view class="title">
-           <view class="item" @click="switchLoginType('account')"><text :class="loginType === 'account' ? 'active' : ''">{{ accountTitle }}</text></view>
-           <view class="item" @click="switchLoginType('sms')"><text :class="loginType === 'sms' ? 'active' : ''">短信登录</text></view>
+           <view class="item" @click="switchLoginType('account')"><text :class="loginType === 'account' ? 'active' : ''">{{ $t(accountTitle) }}</text></view>
+           <view class="item" @click="switchLoginType('sms')"><text :class="loginType === 'sms' ? 'active' : ''">{{ $t('短信登录') }}</text></view>
       </view>
     </view>
     
@@ -13,22 +15,22 @@
       <!-- 手机号 -->
       <view class="form-item">
         <text class="iconfont icon-sy-yh"></text>
-        <input class="form-item--input uni-input" type="text" v-model="account" maxlength="30" clearable="true" placeholder="请输入手机号或会员号" />
+        <input class="form-item--input uni-input" type="text" v-model="account" maxlength="30" clearable="true" :placeholder="$t('请输入手机号或会员号')" />
       </view>
       <!-- 密码 -->
       <view class="form-item">
         <text class="iconfont icon-suo"></text>
-        <input class="form-item--input" type="password" autocomplete="off" v-model="password" maxlength="30" minlength="1" value="" placeholder="请输入您的密码" />
+        <input class="form-item--input" type="password" autocomplete="off" v-model="password" maxlength="30" minlength="1" value="" :placeholder="$t('请输入您的密码')" />
       </view>
       <!-- 确认密码 -->
       <view class="form-item" v-if="isRegister">
         <text class="iconfont icon-suo"></text>
-        <input class="form-item--input" type="password" autocomplete="off" v-model="password1" maxlength="30" value="" placeholder="请再次输入密码" />
+        <input class="form-item--input" type="password" autocomplete="off" v-model="password1" maxlength="30" value="" :placeholder="$t('请再次输入您的密码')" />
       </view>
       <!-- 图形验证码 -->
       <view class="form-item">
         <text class="iconfont icon-tuxingyanzhengma"></text>
-        <input class="form-item--input" type="text" v-model="captchaCode" maxlength="5" placeholder="请输入图形验证码" />
+        <input class="form-item--input" type="text" v-model="captchaCode" maxlength="5" :placeholder="$t('请先输入图形验证码')" />
         <view class="form-item--parts">
           <view class="captcha" @click="getCaptcha()">
             <image class="image" :src="captcha"></image>
@@ -36,11 +38,11 @@
         </view>
       </view>
       <!-- 按钮 -->
-      <view class="login-button" v-if="!isRegister" @click="handleSubmit"><text>立即登录</text></view>
-      <view class="login-button" v-if="isRegister" @click="handleSubmit"><text>立即注册</text></view>
-      <view class="cancel-button" @click="handleCancel"><text>取消</text></view>
-      <view class="register" v-if="!isRegister" @click="toRegister()">还没有账号？去注册</view>
-      <view class="register" v-if="isRegister" @click="toRegister()">已有账号？立即登录</view>
+      <view class="login-button" v-if="!isRegister" @click="handleSubmit"><text>{{ $t('立即登录') }}</text></view>
+      <view class="login-button" v-if="isRegister" @click="handleSubmit"><text>{{ $t('立即注册') }}</text></view>
+      <view class="cancel-button" @click="handleCancel"><text>{{ $t('取消') }}</text></view>
+      <view class="register" v-if="!isRegister" @click="toRegister()">{{ $t('还没有账号？去注册') }}</view>
+      <view class="register" v-if="isRegister" @click="toRegister()">{{ $t('已有账号？立即登录') }}</view>
     </view>
     <!-- 账号登录表单 end-->
     
@@ -50,12 +52,12 @@
       <view class="form-item">
           <text class="iconfont icon-shoujihao"></text>
           <text class="pre-mobile">+86</text>
-          <input class="form-item--input" style="padding-left: 12rpx;" type="number" v-model="mobile" maxlength="11" placeholder="请输入手机号码" />
+          <input class="form-item--input" style="padding-left: 12rpx;" type="number" v-model="mobile" maxlength="11" :placeholder="$t('请输入手机号码')" />
       </view>
       <!-- 图形验证码 -->
       <view class="form-item">
         <text class="iconfont icon-tuxingyanzhengma"></text>
-        <input class="form-item--input" type="text" v-model="captchaCode" maxlength="5" placeholder="请输入图形验证码" />
+        <input class="form-item--input" type="text" v-model="captchaCode" maxlength="5" :placeholder="$t('请先输入图形验证码')" />
         <view class="form-item--parts">
           <view class="captcha" @click="getCaptcha()">
             <image class="image" :src="captcha"></image>
@@ -65,16 +67,16 @@
       <!-- 短信验证码 -->
       <view class="form-item">
         <text class="iconfont icon-yanzhengma"></text>
-        <input class="form-item--input" type="number" v-model="smsCode" maxlength="6" placeholder="请输入短信验证码" />
+        <input class="form-item--input" type="number" v-model="smsCode" maxlength="6" :placeholder="$t('请先输入短信验证码')" />
         <view class="form-item--parts">
           <view class="captcha-sms" @click="handelSmsCaptcha()">
-            <text v-if="!smsState" class="activate">获取验证码</text>
-            <text v-else class="un-activate">重新发送({{ times }})秒</text>
+            <text v-if="!smsState" class="activate">{{ $t('获取验证码') }}</text>
+            <text v-else class="un-activate">{{ $t('重新发送') }}({{ times }}){{ $t('秒') }}</text>
           </view>
         </view>
       </view>
       <!-- 登录按钮 -->
-      <view class="login-button" @click="handleSubmit"><text>验证码登录</text></view>
+      <view class="login-button" @click="handleSubmit"><text>{{ $t('验证码登录') }}</text></view>
     </view>
     <!-- 短信登录表单 end-->
   </view>

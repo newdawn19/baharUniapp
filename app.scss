@@ -5,6 +5,13 @@ page {
   background: #fafafa;
 }
 
+/* H5 顶部空白修复：nav bar 背景兜底。
+   pages.json 里 navigationBarBackgroundColor: #00acac 在部分 H5 runtime
+   下未生效（inline background-color 没注入），导致导航栏区域与页面背景
+   同色、与下方同色 sticky header 之间出现一道白条断层。
+   强制给 .uni-page-head 注入品牌色，覆盖 runtime 漏注入的情况。 */
+.uni-page-head { background-color: #00acac; }
+
 uni-modal {
   z-index: 99999999999999 !important;
 }

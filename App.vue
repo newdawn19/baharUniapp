@@ -90,7 +90,9 @@
   .bahar-hero {
     position: relative;
     overflow: hidden;
-    margin: 24rpx 24rpx 0;
+    /* 顶部不再留 24rpx 的浅色空白 —— 紧贴导航栏、与品牌色视觉上连成一片，
+       解决“会员中心顶部一行空白、界面不连贯”问题。左右 24rpx 仍保留页面边距。 */
+    margin: 0 24rpx;
     padding: 36rpx 32rpx 40rpx;
     /* 竞品规格：会员卡高 280rpx。
        用 min-height 而不是 height —— 卡内还有头像/等级/余额积分/会员号四层内容，
